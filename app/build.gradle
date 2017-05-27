@@ -29,6 +29,9 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 
+    // preferences
+    compile 'com.android.support:preference-v7:25.1.0'
+
     // material drawer
     compile('com.mikepenz:materialdrawer:5.8.1@aar') {
         transitive = true

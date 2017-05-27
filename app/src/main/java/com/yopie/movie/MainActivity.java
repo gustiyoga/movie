@@ -2,10 +2,12 @@ package com.yopie.movie;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,12 +41,17 @@ import butterknife.ButterKnife;
 
 import static android.content.ContentValues.TAG;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     MovieAdapter adapter;
     private List<MovieList> listMovie = new ArrayList<>();
     private Gson gson = new Gson();
+
+    SharedPreferences sharedpreferences;
+    private String APIurl;
+    private String sortBy = "popular";
+    private Boolean configSortBy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
+
+        setupSharedPreferences();
 
         setupRecyclerview();
 
@@ -72,16 +81,32 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.Setting:
-                Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
+                Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+                startActivity(startSettingsActivity);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    public void setupSharedPreferences() {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+
+        configSortBy = sharedPreferences.getBoolean("sort_by", true);
+
+        if(configSortBy)
+            sortBy = "popular";
+        else
+            sortBy = "top_rated";
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
     public void getDataFromApi() {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String APIurl = getResources().getString(R.string.base_url) + "/movie/popular?api_key=" + BuildConfig.API_KEY + "&page=1";
+        APIurl = getResources().getString(R.string.base_url) + "/movie/" + sortBy + "?api_key=" + BuildConfig.API_KEY + "&page=1";
 
         Log.e(TAG, APIurl);
 
@@ -138,20 +163,26 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         Intent intentDetail = new Intent(MainActivity.this, MovieDetailActivity.class);
 
         intentDetail.putExtra("data", gson.toJson(data)); // mengirim data ke detail activity
-//
-//        startActivity(intentDetail);
 
-        // animation
-//        View sharedView = findViewById(R.id.card_thumbnail);
-//        View sharedView = findViewById(R.id.card_title);
-        String transitionName = "Transition Poster";
         Pair<View, String> p1 = Pair.create((View)ivCardThumbnail, getResources().getString(R.string.trans_poster));
         Pair<View, String> p2 = Pair.create((View)tvTitle, getResources().getString(R.string.trans_title));
 
         ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, p1, p2);
         startActivity(intentDetail, transitionActivityOptions.toBundle());
-//        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivCardThumbnail, transitionName);
-//        ActivityCompat.startActivity(this, intentDetail, transitionActivityOptions.toBundle());
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("sort_by")) {
+            configSortBy = sharedPreferences.getBoolean(key, true);
+
+            if(configSortBy)
+                sortBy = "popular";
+            else
+                sortBy = "top_rated";
+
+            getDataFromApi();
+        }
     }
 
     /**
@@ -200,5 +231,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
+    }
 }

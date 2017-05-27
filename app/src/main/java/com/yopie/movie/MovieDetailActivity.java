@@ -67,7 +67,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         Glide
                 .with(this)
-                .load("https://image.tmdb.org/t/p/w300" + listData.getBackdropPath())
+                .load("https://image.tmdb.org/t/p/w500" + listData.getBackdropPath())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .placeholder(R.mipmap.ic_launcher)
