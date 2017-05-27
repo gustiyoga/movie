@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,6 +16,8 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,7 +38,7 @@ import butterknife.ButterKnife;
 
 import static android.content.ContentValues.TAG;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener {
 
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     MovieAdapter adapter;
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupRecyclerview();
 
+        adapter.setMovieItemClickListener(this);
     }
 
     @Override
@@ -66,9 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.Setting:
-                Intent iSetting = new Intent(MainActivity.this, MovieDetailActivity.class);
-                startActivity(iSetting);
-                return true;
+                Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -127,6 +130,23 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         getDataFromApi();
+    }
+
+    @Override
+    public void onMovieItemClick(MovieList data, ImageView ivCardThumbnail) {
+        Intent intentDetail = new Intent(MainActivity.this, MovieDetailActivity.class);
+
+        intentDetail.putExtra("data", gson.toJson(data)); // mengirim data ke detail activity
+//
+//        startActivity(intentDetail);
+
+        // animation
+//        View sharedView = findViewById(R.id.card_thumbnail);
+//        View sharedView = findViewById(R.id.card_title);
+        String transitionName = "Transition";
+
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivCardThumbnail, transitionName);
+        ActivityCompat.startActivity(this, intentDetail, transitionActivityOptions.toBundle());
     }
 
     /**

@@ -31,7 +31,7 @@ public class MovieItemViewHolder extends RecyclerView.ViewHolder {
     public void bind(MovieList data, Context context) {
         Glide
                 .with(context)
-                .load("https://image.tmdb.org/t/p/w185" + data.getPosterPath())
+                .load("https://image.tmdb.org/t/p/w300" + data.getPosterPath())
                 .centerCrop()
                 .placeholder(R.mipmap.ic_launcher)
                 .crossFade()
