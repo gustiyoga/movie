@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yopie.movie.R;
 import com.yopie.movie.model.MovieList;
 
@@ -19,8 +20,7 @@ import butterknife.ButterKnife;
 
 public class MovieItemViewHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.card_title) TextView tvCardTitle;
-    @BindView(R.id.card_rating) TextView tvCardRating;
+    @BindView(R.id.tv_title) TextView tvCardTitle;
     @BindView(R.id.card_thumbnail) ImageView ivCardThumbnail;
 
     public MovieItemViewHolder(View itemView) {
@@ -32,12 +32,12 @@ public class MovieItemViewHolder extends RecyclerView.ViewHolder {
         Glide
                 .with(context)
                 .load("https://image.tmdb.org/t/p/w300" + data.getPosterPath())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .placeholder(R.mipmap.ic_launcher)
                 .crossFade()
                 .into(ivCardThumbnail);
 
         tvCardTitle.setText(data.getTitle());
-        tvCardRating.setText("Rating : " + String.valueOf(data.getVoteAverage()));
     }
 }

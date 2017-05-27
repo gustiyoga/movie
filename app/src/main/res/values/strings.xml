@@ -3,5 +3,6 @@
     <string name="base_url">http://api.themoviedb.org/3</string>
     <string name="activity_title_movie_detail"></string>
 
-    <string name="trans_thumbnail">Transition Thumbnail</string>
+    <string name="trans_poster">Transition Poster</string>
+    <string name="trans_title">Transition Title</string>
 </resources>

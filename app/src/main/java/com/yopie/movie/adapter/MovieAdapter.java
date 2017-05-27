@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.yopie.movie.R;
 import com.yopie.movie.model.MovieList;
@@ -51,7 +52,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             @Override
             public void onClick(View v) {
                 if (mMovieItemClickListener != null)
-                    mMovieItemClickListener.onMovieItemClick(data, movieItemViewHolder.ivCardThumbnail);
+                    mMovieItemClickListener.onMovieItemClick(data, movieItemViewHolder.ivCardThumbnail, movieItemViewHolder.tvCardTitle);
                 else
                     Log.e(TAG, "Error onClick listener");
             }
@@ -70,6 +71,6 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     // Inner interface class utk click listener pada recyclerview
     public interface MovieItemClickListener {
-        void onMovieItemClick(MovieList data, ImageView ivCardThumbnail);
+        void onMovieItemClick(MovieList data, ImageView ivCardThumbnail, TextView tvTitle);
     }
 }

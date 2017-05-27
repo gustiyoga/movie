@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.yopie.movie.model.MovieList;
 
@@ -54,21 +55,24 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void bindData() {
-        Glide
-                .with(this)
-                .load("https://image.tmdb.org/t/p/w300" + listData.getBackdropPath())
-                .centerCrop()
-                .placeholder(R.mipmap.ic_launcher)
-                .crossFade()
-                .into(iv_cover);
 
         Glide
                 .with(this)
                 .load("https://image.tmdb.org/t/p/w154" + listData.getPosterPath())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .placeholder(R.mipmap.ic_launcher)
                 .crossFade()
                 .into(cardThumbnail);
+
+        Glide
+                .with(this)
+                .load("https://image.tmdb.org/t/p/w300" + listData.getBackdropPath())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .placeholder(R.mipmap.ic_launcher)
+                .crossFade()
+                .into(iv_cover);
 
         tvTitle.setText(listData.getTitle());
         tvOverview.setText(listData.getOverview());

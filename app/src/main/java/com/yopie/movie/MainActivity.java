@@ -1,22 +1,23 @@
 package com.yopie.movie;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
-    public void onMovieItemClick(MovieList data, ImageView ivCardThumbnail) {
+    public void onMovieItemClick(MovieList data, ImageView ivCardThumbnail, TextView tvTitle) {
         Intent intentDetail = new Intent(MainActivity.this, MovieDetailActivity.class);
 
         intentDetail.putExtra("data", gson.toJson(data)); // mengirim data ke detail activity
@@ -143,10 +144,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         // animation
 //        View sharedView = findViewById(R.id.card_thumbnail);
 //        View sharedView = findViewById(R.id.card_title);
-        String transitionName = "Transition";
+        String transitionName = "Transition Poster";
+        Pair<View, String> p1 = Pair.create((View)ivCardThumbnail, getResources().getString(R.string.trans_poster));
+        Pair<View, String> p2 = Pair.create((View)tvTitle, getResources().getString(R.string.trans_title));
 
-        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivCardThumbnail, transitionName);
-        ActivityCompat.startActivity(this, intentDetail, transitionActivityOptions.toBundle());
+        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, p1, p2);
+        startActivity(intentDetail, transitionActivityOptions.toBundle());
+//        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivCardThumbnail, transitionName);
+//        ActivityCompat.startActivity(this, intentDetail, transitionActivityOptions.toBundle());
     }
 
     /**
