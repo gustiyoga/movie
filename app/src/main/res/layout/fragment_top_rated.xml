@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipePopular"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/recyclerviewTopRated"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:scrollbars="vertical" />
+
+        <TextView
+            android:padding="5dp"
+            android:id="@+id/tv_noConnection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/md_white_1000"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif"
+            android:background="#60000000"
+            android:visibility="gone"
+            android:text="Not connected to internet"/>
+
+    </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

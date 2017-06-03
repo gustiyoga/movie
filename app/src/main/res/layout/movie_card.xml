@@ -20,7 +20,6 @@
 
             <ImageView
                 android:id="@+id/card_thumbnail"
-                android:src="@mipmap/ic_launcher"
                 android:layout_width="match_parent"
                 android:layout_height="230dp"
                 android:scaleType="fitXY" />
