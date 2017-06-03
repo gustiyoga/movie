@@ -66,6 +66,13 @@ public class FavoritFragment extends android.support.v4.app.Fragment implements 
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        showDataFromDB(dbHelper.getFavoriteMovie());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorit, container, false);
         unbinder = ButterKnife.bind(this, view);
